@@ -1,0 +1,16 @@
+# Siril Advanced Workflow
+requires 1.2.0
+cd $workingdir
+requires subdir lights
+requires subdir darks
+requires subdir flats
+requires subdir bias
+
+# Preprocessing
+convert lights
+stack lights result=registered
+preprocess registered -dark=darks -flat=flats -bias=bias
+
+# Registration and stacking
+register pp_*
+stack r_pp_* result=final reject=2 drizzle
