@@ -1,0 +1,9 @@
+rawpy
+imageio
+imageio-ffmpeg
+Pillow
+piexif
+lxml
+tqdm
+numpy
+pytest
