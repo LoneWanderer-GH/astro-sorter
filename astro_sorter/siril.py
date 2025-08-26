@@ -9,7 +9,7 @@ def generate_siril_script(
         output_path: Path, lights_dir: Path, darks_dir: Optional[Path] = None, flats_dir: Optional[Path] = None,
         biases_dir: Optional[Path] = None, result_name: str = "result_stacked", method: str = "rej",
         rej_params: str = "3 3"
-        ) -> Path:
+) -> Path:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     lines = ["requires 1.2", f"cd {lights_dir}", "setext .tif"]
     # preprocess if calibration frames exist
@@ -29,14 +29,7 @@ def generate_siril_script(
     return output_path
 
 
-def run_siril(siril_exe: Path | str, script_path: Path) -> int:
-    try:
-        proc = subprocess.run([str(siril_exe), "-s", str(script_path)], capture_output=True, text=True)
-        return proc.returncode
-    except FileNotFoundError:
-        return 127
-
-
+# Map friendly workflow names to script paths relative to this module.
 WORKFLOWS = {
         "basic"     : "workflows/siril_basic.ssf",
         "advanced"  : "workflows/siril_advanced.ssf",
@@ -44,11 +37,39 @@ WORKFLOWS = {
 }
 
 
-def run_workflow(work_dir: Path, mode: str):
-    script_path = Path(__file__).parent / WORKFLOWS[mode]
+def run_workflow(work_dir: Path, mode: str, siril_exe: str | None = None) -> None:
+    """
+    Run a Siril workflow (.ssf) in CLI mode.
+
+    Args:
+        work_dir: directory used as working dir by Siril
+        mode: one of WORKFLOWS keys
+        siril_exe: optional override for Siril executable name/path
+                   Defaults to 'siril-cli' then fallback to 'siril'.
+    """
+    work_dir = Path(work_dir)
+    if not work_dir.exists():
+        raise FileNotFoundError(f"Working directory not found: {work_dir}")
+    
+    script_rel = WORKFLOWS.get(mode)
+    if not script_rel:
+        raise ValueError(f"Unknown Siril workflow '{mode}'. Options: {', '.join(WORKFLOWS)}")
+    
+    script_path = Path(__file__).parent / script_rel
     if not script_path.exists():
         raise FileNotFoundError(f"Siril script not found: {script_path}")
     
-    cmd = ["siril-cli", "-d", str(work_dir), "-s", str(script_path)]
-    print(f"Running: {' '.join(cmd)}")
-    subprocess.run(cmd, check=True)
+    # On Windows, Siril CLI might be 'siril-cli.exe' or 'siril.exe'
+    exe = siril_exe or "siril-cli"
+    cmd = [exe, "-d", str(work_dir), "-s", str(script_path)]
+    
+    try:
+        subprocess.run(cmd, check=True)
+    except FileNotFoundError:
+        # Fallback if siril-cli is not found
+        alt = "siril"
+        if exe != alt:
+            cmd[0] = alt
+            subprocess.run(cmd, check=True)
+        else:
+            raise

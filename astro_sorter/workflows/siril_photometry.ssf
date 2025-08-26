@@ -1,0 +1,12 @@
+# Siril photometry-oriented workflow
+# Requires Siril >= 1.2
+
+cd $workingdir
+
+requires subdir lights
+
+convert lights seq
+register seq -prefix r_
+
+# Simple stack optimized for star preservation
+stack r_* result=stack_photometry

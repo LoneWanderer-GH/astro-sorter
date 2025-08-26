@@ -1,0 +1,14 @@
+# Siril basic workflow
+# Requires Siril >= 1.2
+# Variables:
+#   $workingdir is set via -d
+
+cd $workingdir
+
+# Expect a subdir "lights"
+requires subdir lights
+
+# Convert lights to SER/FITS sequence, then register + stack
+convert lights seq
+register seq -prefix r_
+stack r_* result=stack_basic reject=2

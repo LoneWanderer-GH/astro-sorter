@@ -75,6 +75,18 @@ python main.py
 * Organiser dans les répertoires Lights / Darks / Flats / Biases
 * Exporter un projet Sequator (.sep) ou exécuter un workflow Siril
 
+### Démarrage rapide en ligne de commande
+
+```powershell
+# Convert, create Sequator and DSS files, then run advanced Siril workflow:
+python astro_sorter_cli.py `
+  --input "D:\Astro\2025-08-12\Session1" `
+  --output "D:\Astro\2025-08-12\Processed" `
+  --convert --sequator --dss `
+  --siril advanced `
+  --project-name "PerseidSession"
+```
+
 ---
 
 ## 📂 Organisation du projet

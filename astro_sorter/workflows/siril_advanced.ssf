@@ -1,16 +1,24 @@
-# Siril Advanced Workflow
-requires 1.2.0
+# Siril advanced workflow: calibration + registration + drizzle stacking
+# Requires Siril >= 1.2
+
 cd $workingdir
+
 requires subdir lights
 requires subdir darks
 requires subdir flats
 requires subdir bias
 
-# Preprocessing
-convert lights
-stack lights result=registered
-preprocess registered -dark=darks -flat=flats -bias=bias
+# 1) Convert to sequences
+convert lights seq_l
+convert darks seq_d
+convert flats seq_f
+convert bias seq_b
 
-# Registration and stacking
-register pp_*
-stack r_pp_* result=final reject=2 drizzle
+# 2) Preprocessing (calibration)
+preprocess seq_l -dark=seq_d -flat=seq_f -bias=seq_b -cfa -debayer
+
+# 3) Registration
+register pp_* -prefix r_
+
+# 4) Stacking with drizzle
+stack r_pp_* result=stack_advanced drizzle

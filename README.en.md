@@ -72,6 +72,18 @@ python main.py
 * Convert files to JPEG/TIFF (if missing)
 * Organize into Lights / Darks / Flats / Biases
 * Optionally export a Sequator project (.sep) or run a Siril workflow
+
+### Quickstart CLI
+
+```powershell
+# Convert, create Sequator and DSS files, then run advanced Siril workflow:
+python astro_sorter_cli.py `
+  --input "D:\Astro\2025-08-12\Session1" `
+  --output "D:\Astro\2025-08-12\Processed" `
+  --convert --sequator --dss `
+  --siril advanced `
+  --project-name "PerseidSession"
+```
  
 ---
 
@@ -98,6 +110,7 @@ astro_sorter_project/
     └── workflows/
         └── python-ci.yml    # GitHub Actions CI
 ```
+
 
 ---
 ## 🚀 Roadmap
