@@ -32,6 +32,51 @@ Le projet est conçu pour être **modulaire, maintenable et extensible**, avec u
 
 ---
 
+## ⚙️ Installation
+
+### Prérequis
+- Python 3.10+
+- Windows 11 (testé)
+- [Siril](https://siril.org/) installé et accessible dans le PATH (optionnel, pour lancer des scripts)
+- [Sequator](https://sites.google.com/view/sequator/) (optionnel, pour exploiter les fichiers projet générés)
+
+### Étapes d’installation
+
+1. Cloner le dépôt :
+```powershell
+git clone https://github.com/yourusername/astro_sorter_project.git
+cd astro_sorter_project
+```
+
+2. Créer et activer un environnement virtuel :
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+```
+
+3. Installer les dépendances :
+
+```powershell
+pip install -r requirements.txt
+```
+
+4. Lancer l’application :
+
+```powershell
+python main.py
+```
+
+### Démarrage rapide
+* Sélectionner un dossier contenant des images NEF
+* Entrer ou choisir une position sauvegardée (latitude/longitude)
+* Utiliser l’outil de renommage par lot
+* Convertir les fichiers en JPEG/TIFF (si manquants)
+* Organiser dans les répertoires Lights / Darks / Flats / Biases
+* Exporter un projet Sequator (.sep) ou exécuter un workflow Siril
+
+---
+
 ## 📂 Organisation du projet
 
 ```text
@@ -54,3 +99,11 @@ astro_sorter_project/
 └── .github/
     └── workflows/
         └── python-ci.yml    # Intégration continue GitHub Actions
+```
+
+## 🚀 Roadmap
+
+- [ ] Workflows Siril avancés  
+- [ ] Support de DeepSkyStacker  
+- [ ] Gestion avancée des métadonnées EXIF  
+- [ ] Mode CLI (sans interface graphique)  
